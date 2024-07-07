@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MQTT.js Example with wss</title>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <script>
+    function connect() {
+      const client = mqtt.connect('wss://broker.hivemq.com:8000/mqtt');
+
+      client.on('connect', function () {
+        console.log('Connected');
+        document.getElementById('status').innerText = 'Connected';
+        client.subscribe('test/topic', function (err) {
+          if (!err) {
+            client.publish('test/topic', 'Hello MQTT from wss');
+          }
+        });
+      });
+
+      client.on('message', function (topic, message) {
+        console.log('Message Arrived: ' + message.toString());
+      });
+
+      client.on('error', function (error) {
+        console.error('Connection error:', error);
+        document.getElementById('status').innerText = 'Connection error';
+      });
+    }
+
+    window.onload = connect;
+  </script>
+</head>
+<body>
+  <h1>MQTT.js Example with wss</h1>
+  <div id="status">Connecting...</div>
+</body>
+</html>
